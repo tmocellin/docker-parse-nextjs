@@ -38,3 +38,8 @@ services:
             PARSE_DASHBOARD_USER_PASSWORD: "password"
         ports:
             - "4040:4040"
+    web-app:
+        build: ./web-app
+        container_name: "web-app"
+        ports:
+            - "3000:3000"
