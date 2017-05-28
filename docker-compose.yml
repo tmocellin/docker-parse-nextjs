@@ -1,0 +1,40 @@
+version: '2'
+services:
+    mongo:
+        image: mongo:3
+        container_name: "mongo-db"
+        volumes:
+            - ./mongo/data:/db/data
+        ports:
+            - "27017:27017"
+    api:
+        build: ./parse-server
+        container_name: "parse-server"
+        ports:
+            - "1337:1337"
+        environment:
+          PORT: 1337
+          DATABASE_URI: mongodb://mongo:27017
+          APP_ID: "web-app-docker"
+          MASTER_KEY: "master"
+          PARSE_MOUNT: "/parse"
+          SERVER_URL: "http://192.168.99.100:1337/parse"
+        volumes:
+            - ./parse-server/cloud:/parse/cloud
+            - ./parse-server/public:/parse/public
+        depends_on:
+            - mongo
+    dashboard:
+        build: ./dashboard
+        container_name: "parse-dashboard"
+        environment:
+            PORT: 4040
+            PARSE_DASHBOARD_ALLOW_INSECURE_HTTP: "True"
+            PARSE_DASHBOARD_SERVER_URL: "http://192.168.99.100:1337/parse"
+            PARSE_DASHBOARD_MASTER_KEY: "master"
+            PARSE_DASHBOARD_APP_ID: "web-app-docker"
+            PARSE_DASHBOARD_APP_NAME: "Docker Web App"
+            PARSE_DASHBOARD_USER_ID: "user"
+            PARSE_DASHBOARD_USER_PASSWORD: "password"
+        ports:
+            - "4040:4040"
