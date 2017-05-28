@@ -18,7 +18,10 @@ services:
           APP_ID: "web-app-docker"
           MASTER_KEY: "master"
           PARSE_MOUNT: "/parse"
-          SERVER_URL: "http://192.168.99.100:1337/parse"
+          SERVER_URL: "https://api.jfds.fr/parse"
+          VIRTUAL_HOST: "api.jfds.fr"
+          LETSENCRYPT_HOST: "api.jfds.fr"
+          LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
         volumes:
             - ./parse-server/cloud:/parse/cloud
             - ./parse-server/public:/parse/public
@@ -30,12 +33,15 @@ services:
         environment:
             PORT: 4040
             PARSE_DASHBOARD_ALLOW_INSECURE_HTTP: "True"
-            PARSE_DASHBOARD_SERVER_URL: "http://192.168.99.100:1337/parse"
+            PARSE_DASHBOARD_SERVER_URL: "https://api.jfds.fr/parse"
             PARSE_DASHBOARD_MASTER_KEY: "master"
             PARSE_DASHBOARD_APP_ID: "web-app-docker"
             PARSE_DASHBOARD_APP_NAME: "Docker Web App"
             PARSE_DASHBOARD_USER_ID: "user"
             PARSE_DASHBOARD_USER_PASSWORD: "password"
+            VIRTUAL_HOST: "dashboard.jfds.fr"
+            LETSENCRYPT_HOST: "dashboard.jfds.fr"
+            LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
         ports:
             - "4040:4040"
     web-app:
@@ -43,3 +49,28 @@ services:
         container_name: "web-app"
         ports:
             - "3000:3000"
+        environment:
+            VIRTUAL_HOST: "jfds.fr"
+            LETSENCRYPT_HOST: "jfds.fr"
+            LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        ports:
+          - '80:80'
+          - '443:443'
+          volumes:
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+          - /etc/nginx/vhost.d
+          - /usr/share/nginx/html
+          - /apps/web/ssl:/etc/nginx/certs:ro
+    ssl-companion:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        container_name: ssl-companion
+        volumes:
+          - /apps/web/ssl:/etc/nginx/certs:rw
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+        volumes_from:
+          - nginx-proxy
+        depends_on:
+          - nginx-proxy
