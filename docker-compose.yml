@@ -15,13 +15,13 @@ services:
         environment:
           PORT: 1337
           DATABASE_URI: mongodb://mongo:27017
-          APP_ID: "web-app-docker"
-          MASTER_KEY: "master"
+          APP_ID: "YOUR PARSE APP ID"
+          MASTER_KEY: "YOUR PARSE MASTER KEY"
           PARSE_MOUNT: "/parse"
-          SERVER_URL: "https://api.jfds.fr/parse"
-          VIRTUAL_HOST: "api.jfds.fr"
-          LETSENCRYPT_HOST: "api.jfds.fr"
-          LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
+          SERVER_URL: "YOUR PARSE SERVER URL"
+          VIRTUAL_HOST: "YOUR PARSE SERVER URL"
+          LETSENCRYPT_HOST: "YOUR PARSE SERVER URL"
+          LETSENCRYPT_EMAIL: "YOUR EMAIL"
         volumes:
             - ./parse-server/cloud:/parse/cloud
             - ./parse-server/public:/parse/public
@@ -33,15 +33,15 @@ services:
         environment:
             PORT: 4040
             PARSE_DASHBOARD_ALLOW_INSECURE_HTTP: "True"
-            PARSE_DASHBOARD_SERVER_URL: "https://api.jfds.fr/parse"
-            PARSE_DASHBOARD_MASTER_KEY: "master"
-            PARSE_DASHBOARD_APP_ID: "web-app-docker"
-            PARSE_DASHBOARD_APP_NAME: "Docker Web App"
-            PARSE_DASHBOARD_USER_ID: "user"
-            PARSE_DASHBOARD_USER_PASSWORD: "password"
-            VIRTUAL_HOST: "dashboard.jfds.fr"
-            LETSENCRYPT_HOST: "dashboard.jfds.fr"
-            LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
+            PARSE_DASHBOARD_SERVER_URL: "YOUR PARSE SERVER URL"
+            PARSE_DASHBOARD_MASTER_KEY: "YOUR PARSE MASTER KEY"
+            PARSE_DASHBOARD_APP_ID: "YOUR PARSE APP ID"
+            PARSE_DASHBOARD_APP_NAME: "YOUR APP NAME"
+            PARSE_DASHBOARD_USER_ID: "YOUR USERNAME"
+            PARSE_DASHBOARD_USER_PASSWORD: "YOUR PASSWORD"
+            VIRTUAL_HOST: "YOUR PARSE DASHBOARD URL"
+            LETSENCRYPT_HOST: "YOUR PARSE DASHBOARD URL"
+            LETSENCRYPT_EMAIL: "YOUR EMAIL"
         ports:
             - "4040:4040"
     web-app:
@@ -50,9 +50,9 @@ services:
         ports:
             - "3000:3000"
         environment:
-            VIRTUAL_HOST: "jfds.fr"
-            LETSENCRYPT_HOST: "jfds.fr"
-            LETSENCRYPT_EMAIL: "contact@dwastudio.fr"
+            VIRTUAL_HOST: "YOUR NEXT APP URL"
+            LETSENCRYPT_HOST: "YOUR NEXT APP URL"
+            LETSENCRYPT_EMAIL: "YOUR EMAIL"
     nginx-proxy:
         image: jwilder/nginx-proxy
         container_name: nginx-proxy
