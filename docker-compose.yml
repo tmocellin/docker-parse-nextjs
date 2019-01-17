@@ -14,7 +14,7 @@ services:
             - "1337:1337"
         environment:
           PORT: 1337
-          DATABASE_URI: mongodb://mongo:27017
+          DATABASE_URI: mongodb://mongo:27017/dev
           APP_ID: "YOUR PARSE APP ID"
           MASTER_KEY: "YOUR PARSE MASTER KEY"
           PARSE_MOUNT: "/parse"
